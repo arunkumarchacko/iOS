@@ -9,19 +9,12 @@
 import Foundation
 import UIKit
 
-internal class Meme {
+internal struct Meme {
     let memeFileNamesKey = "MemeFileNames"
     let topText: String
     let bottomText: String
     let originalImage: UIImage
     let memeImage: UIImage
-    
-    init(_ topText: String, _ bottomText: String, originalImage: UIImage, memeImage: UIImage) {
-        self.topText = topText
-        self.bottomText = bottomText
-        self.originalImage = originalImage
-        self.memeImage = memeImage
-    }
     
     func save() {
         print("Saving image: Top=\(topText); Bottom=\(bottomText)")

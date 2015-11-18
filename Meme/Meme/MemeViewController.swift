@@ -18,6 +18,8 @@ internal class MemeViewController: UIViewController, UIImagePickerControllerDele
     @IBOutlet weak var shareButton: UIBarButtonItem!
     
     override func viewDidLoad() {
+        super.viewDidLoad()
+        
         cameraButton.enabled = UIImagePickerController.isSourceTypeAvailable(.Camera)
 
         set(topTextView)
@@ -48,8 +50,18 @@ internal class MemeViewController: UIViewController, UIImagePickerControllerDele
     @IBAction func onShareClicked(sender: AnyObject) {
         let memedImage = generateMemedImage()
         let avc = UIActivityViewController(activityItems: [memedImage], applicationActivities: nil)
-        presentViewController(avc, animated: true) { self.saveMeme(memedImage) }
+
+        avc.completionWithItemsHandler = {
+            (_, success, _, _) in
+            success ? self.saveMeme(memedImage) : print("Not saving item since sharing failed or cancelled.")
+        }
+        
+        presentViewController(avc, animated: true, completion: nil)
     }    
+
+    func foo(a: String, b: Bool) {
+        
+    }
     
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
         print("Picked - \(info)")
@@ -73,8 +85,8 @@ internal class MemeViewController: UIViewController, UIImagePickerControllerDele
     
     func subscribeNotifications() {
         print("subscribeNotifications")
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillShow:"    , name: UIKeyboardWillShowNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillHide:"    , name: UIKeyboardWillHideNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillShow:", name: UIKeyboardWillShowNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillHide:", name: UIKeyboardWillHideNotification, object: nil)
     }
     
     func unsubscribeNotifications() {
@@ -127,7 +139,7 @@ internal class MemeViewController: UIViewController, UIImagePickerControllerDele
     
     func generateMemedImage() -> UIImage
     {
-        // So that Toolbar is not captures in the Meme image.
+        // So that Toolbar is not captured in the Meme image.
         toolBar.hidden = true
         
         UIGraphicsBeginImageContext(view.frame.size)
@@ -142,7 +154,7 @@ internal class MemeViewController: UIViewController, UIImagePickerControllerDele
     
     func saveMeme(image: UIImage) {
         print("Saving meme")
-        let m = Meme(topTextView.text!, bottomTextview.text!, originalImage: imageView.image!, memeImage: image)
+        let m = Meme(topText: topTextView.text!, bottomText: bottomTextview.text!, originalImage: imageView.image!, memeImage: image)
         m.save()
     }
     

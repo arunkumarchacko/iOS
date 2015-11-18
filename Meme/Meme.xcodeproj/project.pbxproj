@@ -14,6 +14,7 @@
 		F44633351BF9AAD000023C20 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F44633331BF9AAD000023C20 /* LaunchScreen.storyboard */; };
 		F44633401BF9AAD000023C20 /* MemeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F446333F1BF9AAD000023C20 /* MemeTests.swift */; };
 		F446334B1BF9AAD000023C20 /* MemeUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F446334A1BF9AAD000023C20 /* MemeUITests.swift */; };
+		F44633591BFB669200023C20 /* Meme.swift in Sources */ = {isa = PBXBuildFile; fileRef = F44633581BFB669200023C20 /* Meme.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,6 +48,7 @@
 		F44633461BF9AAD000023C20 /* MemeUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MemeUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F446334A1BF9AAD000023C20 /* MemeUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemeUITests.swift; sourceTree = "<group>"; };
 		F446334C1BF9AAD000023C20 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F44633581BFB669200023C20 /* Meme.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Meme.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -103,6 +105,7 @@
 				F44633311BF9AAD000023C20 /* Assets.xcassets */,
 				F44633331BF9AAD000023C20 /* LaunchScreen.storyboard */,
 				F44633361BF9AAD000023C20 /* Info.plist */,
+				F44633581BFB669200023C20 /* Meme.swift */,
 			);
 			path = Meme;
 			sourceTree = "<group>";
@@ -256,6 +259,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F44633591BFB669200023C20 /* Meme.swift in Sources */,
 				F446332D1BF9AAD000023C20 /* MemeViewController.swift in Sources */,
 				F446332B1BF9AAD000023C20 /* AppDelegate.swift in Sources */,
 			);
@@ -484,6 +488,7 @@
 				F44633511BF9AAD000023C20 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		F44633521BF9AAD000023C20 /* Build configuration list for PBXNativeTarget "MemeTests" */ = {
 			isa = XCConfigurationList;
@@ -492,6 +497,7 @@
 				F44633541BF9AAD000023C20 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		F44633551BF9AAD000023C20 /* Build configuration list for PBXNativeTarget "MemeUITests" */ = {
 			isa = XCConfigurationList;
@@ -500,6 +506,7 @@
 				F44633571BF9AAD000023C20 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

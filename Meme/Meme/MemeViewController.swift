@@ -17,25 +17,36 @@ internal class MemeViewController: UIViewController, UIImagePickerControllerDele
     @IBOutlet weak var toolBar: UIToolbar!
     @IBOutlet weak var shareButton: UIBarButtonItem!
     
+    var model: Meme?
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
         cameraButton.enabled = UIImagePickerController.isSourceTypeAvailable(.Camera)
-
+        shareButton.enabled = false
+        
         set(topTextView)
         set(bottomTextview)
         
-        shareButton.enabled = false
+        // True when called from Edit
+        if let m = model {
+            imageView.image = m.originalImage
+            topTextView.text = m.topText
+            bottomTextview.text = m.bottomText
+            shareButton.enabled = true
+        }
     }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         subscribeNotifications()
+        tabBarController?.tabBar.hidden = true
     }
 
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
         unsubscribeNotifications()
+        tabBarController?.tabBar.hidden = false
     }
     
     @IBAction func onPickClicked(sender: UIBarButtonItem) {
@@ -59,8 +70,15 @@ internal class MemeViewController: UIViewController, UIImagePickerControllerDele
         presentViewController(avc, animated: true, completion: nil)
     }    
 
-    func foo(a: String, b: Bool) {
+    @IBAction func onCancelClicked(sender: UIBarButtonItem) {
+        print("Oncancel clicked")
         
+        if let _ = model {
+            navigationController?.popToRootViewControllerAnimated(true)
+        }
+        else {
+            dismissViewControllerAnimated(true, completion: nil)
+        }
     }
     
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
@@ -154,7 +172,7 @@ internal class MemeViewController: UIViewController, UIImagePickerControllerDele
     
     func saveMeme(image: UIImage) {
         print("Saving meme")
-        let m = Meme(topText: topTextView.text!, bottomText: bottomTextview.text!, originalImage: imageView.image!, memeImage: image)
+        let m = Meme(topText: topTextView.text!, bottomText: bottomTextview.text!, originalImage: imageView.image!, memeImage: image, name: Meme.getFileName())
         m.save()
     }
     
@@ -176,4 +194,3 @@ internal class MemeViewController: UIViewController, UIImagePickerControllerDele
         return false
     }
 }
-

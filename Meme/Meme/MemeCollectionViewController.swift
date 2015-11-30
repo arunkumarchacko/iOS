@@ -17,7 +17,7 @@ class MemeCollectionViewController: UICollectionViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         loadModel()
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "+", style: UIBarButtonItemStyle.Plain, target: self, action: "onAddMemeClicked")
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "+", style: UIBarButtonItemStyle.Plain, target: self, action: "onAddMemeClicked")
         
         let space: CGFloat = 3.0
         let dimension = (view.frame.width - (2 * space)) / 3

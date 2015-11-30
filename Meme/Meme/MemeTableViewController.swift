@@ -13,7 +13,7 @@ internal class MemeTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         reloadModel()
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "+", style: UIBarButtonItemStyle.Plain, target: self, action: "onAddMemeClicked")
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "+", style: UIBarButtonItemStyle.Plain, target: self, action: "onAddMemeClicked")
     }
 
     func reloadModel() {
@@ -36,6 +36,7 @@ internal class MemeTableViewController: UITableViewController {
     }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        print("numberofrowsinsection \(data.count)")
         return data.count
     }
 
@@ -68,6 +69,8 @@ internal class MemeTableViewController: UITableViewController {
             let itemToDelete = data[indexPath.row]
             Meme.DeleteItem(itemToDelete)
             reloadModel()
+            
+            print("MemeCount = \(data.count)")
             tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
         }
     }

@@ -21,16 +21,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     static func deleteMeme(meme : Meme) {
-        var m = Instance.memes!
-        let i = m.indexOf() { $0.name == meme.name }
+        let i = Instance.memes!.indexOf() { $0.name == meme.name }
 
         if let i = i {
-            print("removing item at index \(i)")
-            m.removeAtIndex(i)
+            print("removing item at index \(i); \(Instance.memes!.count)")
+            Instance.memes!.removeAtIndex(i)
         }
         else {
             print("Item not found at index \(i)")
-        }
+        }        
     }
     
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {

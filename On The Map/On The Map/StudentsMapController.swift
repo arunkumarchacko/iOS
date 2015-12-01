@@ -13,32 +13,38 @@ import FBSDKLoginKit
 class StudentsMapController: UIViewController, MKMapViewDelegate {
     @IBOutlet weak var mapView: MKMapView!
     
-    var studentLocations: [StudentInformation] = [StudentInformation]() { didSet { OTMHttpClient.setStudentLocation(studentLocations) }}
     override func viewDidLoad() {
         print("StudentsMapController - viewDidLoad")
         super.viewDidLoad()
         mapView.delegate = self
-
-        if let l = OTMHttpClient.studentLocations {
-            studentLocations = l
-            reload()
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        refresh()
+    }
+    
+    func refresh() {
+        print("refresh")
+        if OTMHttpClient.studentLocations == nil || OTMHttpClient.reloadRequired {
+            OTMHttpClient.invokeRequest(ParseGetStudentLocationContext(), onSuccess: onStudentLocationLoaded, onError: onStudentLocationLoadError)
         }
         else {
-            OTMHttpClient.invokeRequest(ParseGetStudentLocationContext(), onSuccess: onStudentLocationLoaded, onError: onStudentLocationLoadError)
+            OTMHttpClient.studentLocations = OTMHttpClient.studentLocations!
+            reload()
         }
     }
 
     func onStudentLocationLoaded(data: AnyObject) {
         let parsedData = data as? [String: AnyObject]
         if let a = parsedData?["results"] as? [[String: AnyObject]] {
-            studentLocations = StudentInformation.ParseStudentLocations(a)
+            OTMHttpClient.studentLocations = StudentInformation.ParseStudentLocations(a)
             Utils.dispatchMainUIThread() { self.reload() }
         }
         else {
             let c = Utils.getAlertController("Operation failed", msg: "Encountered an unexpected error while processing student location data.")
             Utils.dispatchMainUIThread() { self.presentViewController(c, animated: true, completion: nil) }
         }
-        
     }
     
     func onStudentLocationLoadError(error: String?) {
@@ -48,7 +54,7 @@ class StudentsMapController: UIViewController, MKMapViewDelegate {
 
     func reload() {
         var annotations = [MKPointAnnotation]()
-        studentLocations.forEach() { annotations.append($0.getMapAnnotation()) }
+        OTMHttpClient.studentLocations?.forEach() { annotations.append($0.getMapAnnotation()) }
         
         mapView.addAnnotations(annotations)
     }
@@ -73,10 +79,6 @@ class StudentsMapController: UIViewController, MKMapViewDelegate {
     func mapView(mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
         if control == view.rightCalloutAccessoryView {
             Utils.openUrlInBroswer((view.annotation?.subtitle)!)
-//            let app = UIApplication.sharedApplication()
-//            if let toOpen = view.annotation?.subtitle! {
-//                app.openURL(NSURL(string: toOpen)!)
-//            }
         }
     }
     
@@ -98,20 +100,35 @@ class StudentsMapController: UIViewController, MKMapViewDelegate {
     
     func onUserLoadFailure(error: String) {
         print("onUserLoadFailure - \(error)")
+        
+        let c = Utils.getAlertController("Loading user information failed.", msg: error)
+        Utils.dispatchMainUIThread() { self.presentViewController(c, animated: true, completion: nil) }
     }
     
     @IBAction func onLogoutClicked(sender: UIBarButtonItem) {
-        OTMHttpClient.invokeRequest(UdacityLogoutContext(), onSuccess: onLogoutSuccess, onError: onLogoutFailure)
-        FBSDKAccessToken.setCurrentAccessToken(nil)
+        if let _ = FBSDKAccessToken.currentAccessToken() {
+            print("Logging out of facebook")
+            let loginManager = FBSDKLoginManager()
+            loginManager.logOut()
+            onLogoutSuccess("FB logout success")
+        }
+        else {
+            print("Not logged in to Facebook")
+            
+            OTMHttpClient.invokeRequest(UdacityLogoutContext(), onSuccess: onLogoutSuccess, onError: onLogoutFailure)
+        }
+        
+        Utils.clearState()
     }
     
     func onLogoutSuccess(data: AnyObject) {
+        Utils.clearState()
         print("Logout Success - \(data)")
         Utils.dispatchMainUIThread() { self.dismissViewControllerAnimated(true, completion: nil) }
-        //Utils.dispatchMainUIThread() { self.navigationController?.popToRootViewControllerAnimated(true) }
     }
     
     func onLogoutFailure(error: String?) {
+        Utils.clearState()
         print("Logout failure - \(error)")
         Utils.dispatchMainUIThread() { self.dismissViewControllerAnimated(true, completion: nil) }
     }

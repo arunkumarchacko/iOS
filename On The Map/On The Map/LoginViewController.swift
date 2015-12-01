@@ -9,20 +9,25 @@
 import UIKit
 import FBSDKLoginKit
 
-class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
+class LoginViewController: UIViewController, FBSDKLoginButtonDelegate, UITextFieldDelegate {
 
     @IBOutlet weak var emailTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
     @IBOutlet weak var loginButton: UIButton!
     @IBOutlet weak var fbLoginButton: FBSDKLoginButton!
     
+    // If user taps on the text field while the keyboard is shown, the keyboard is not dismissed.
+    // This field is used to make sure that we do not reposition the keyboard if it is already repositioned.
+    var viewRepositioned = false
+    
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         
         let hasFbToken = FBSDKAccessToken.currentAccessToken() != nil
-//        self.loginButton.enabled = !hasFbToken
-        self.fbLoginButton.enabled = !hasFbToken
+        fbLoginButton.enabled = !hasFbToken
         enableDisableLoginButton()
+        emailTextField.delegate = self
+        passwordTextField.delegate = self
     }
     
     override func viewDidLoad() {
@@ -30,17 +35,20 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
         fbLoginButton.delegate = self
         
         if let a = FBSDKAccessToken.currentAccessToken() {
+            // Already logged in to FB. Auto login user.
             loginFacebook(a.tokenString!)
         }
     }
 
-//    override func viewDidAppear(animated: Bool) {
-//        super.viewDidAppear(animated)
-//        
-//        if let a = FBSDKAccessToken.currentAccessToken() {
-//            loginFacebook(a.tokenString!)
-//        }
-//    }
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        subscribeNotifications()
+    }
+    
+    override func viewDidDisappear(animated: Bool) {
+        super.viewDidDisappear(animated)
+        unsubscribeNotifications()
+    }
     
     @IBAction func onLoginButtonClicked(sender: AnyObject) {
         print("onLoginButtonClicked clicked")
@@ -62,8 +70,7 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
     
     func onError(error: String) {
         print("onError - \(error)")
-        let c = Utils.getAlertController("Login failed", msg: error)
-        
+        let c = Utils.getAlertController("Login failed", msg: error)        
         Utils.dispatchMainUIThread() { self.presentViewController(c, animated: true, completion: nil) }
     }
     
@@ -88,7 +95,8 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
     func loginButton(loginButton: FBSDKLoginButton!, didCompleteWithResult result: FBSDKLoginManagerLoginResult!, error: NSError!) {
         print("didCompleteWithResult")
         if let e = error {
-            onError(e.description)
+            print("FB login failed \(e)")
+            onError("Facebook login operation failed")
             return
         }
         
@@ -107,5 +115,45 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
     }
     
     func loginButtonDidLogOut(loginButton: FBSDKLoginButton!) {
+        print("loginButtonDidLogOut")
+    }
+    
+    func subscribeNotifications() {
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillShow:", name: UIKeyboardWillShowNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillHide:", name: UIKeyboardWillHideNotification, object: nil)
+    }
+    
+    func unsubscribeNotifications() {
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillShowNotification, object: nil)
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillHideNotification, object: nil)
+    }
+    
+    func keyboardWillShow(notification: NSNotification) {
+        print("keyboardWillShow")
+        if viewRepositioned {
+            print("View is already repositioned")
+            return
+        }
+        
+        viewRepositioned = true
+        view.frame.origin.y -= getKeyboardHeight(notification)
+    }
+    
+    func keyboardWillHide(notification: NSNotification) {
+        print("keyboardWillHide")
+        if (viewRepositioned) {
+            view.frame.origin.y += getKeyboardHeight(notification)
+            viewRepositioned = false
+        }
+    }
+    
+    func getKeyboardHeight(notification: NSNotification) -> CGFloat {
+        let keyboardSize = notification.userInfo![UIKeyboardFrameEndUserInfoKey] as! NSValue
+        return keyboardSize.CGRectValue().height / 4
+    }
+    
+    func textFieldShouldReturn(textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
     }
 }

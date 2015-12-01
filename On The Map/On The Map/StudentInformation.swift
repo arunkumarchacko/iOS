@@ -19,10 +19,14 @@ internal struct StudentInformation {
     let udateTime: String
     
     static func ParseStudentLocations(data: [[String: AnyObject]]) -> [StudentInformation] {
+        print("ParseStudentLocations")
         var result = [StudentInformation]()
         for sl in data {
-            if let created = StudentInformation.create(sl) {
+            if let created = StudentInformation(data: sl) {
                 result.append(created)
+            }
+            else {
+                print("Ignoring \(sl)")
             }
         }
         
@@ -30,9 +34,17 @@ internal struct StudentInformation {
         return result
     }
     
-    static func create(data: [String: AnyObject]) -> StudentInformation? {
-        if let fn = getString(data, "firstName"), ln = getString(data, "lastName"), lat = data["latitude"] as? Double, long = data["longitude"] as? Double, mu = getString(data, "mediaURL"), ms = getString(data, "mapString"), uat = getString(data, "updatedAt") {
-            return StudentInformation(firstName: fn, lastName: ln, latitude: lat, longitude: long, mediaUrl: mu, mapString: ms, udateTime: uat)
+    init?(data: [String: AnyObject]) {
+        if let fn = StudentInformation.getString(data, "firstName"), ln = StudentInformation.getString(data, "lastName"), lat = data["latitude"] as? Double, long = data["longitude"] as? Double, mu = StudentInformation.getString(data, "mediaURL"), ms = StudentInformation.getString(data, "mapString"), uat = StudentInformation.getString(data, "updatedAt") {
+            firstName = fn
+            lastName = ln
+            latitude = lat
+            longitude = long
+            mediaUrl = mu
+            mapString = ms
+            udateTime = uat
+            return
+            
         }
         else {
             print("Parsing failed \(data)")

@@ -34,19 +34,19 @@ internal class RequestContext {
         return msg
     }
     
-    func parseData(data: NSData?) -> (String?, AnyObject?) {
+    func parseData(data: NSData) -> (String?, AnyObject?) {
         print("successCallback")
         var newData: NSData? = nil
+        let prefixToDiscard = getPrefixToDiscard()
         
-        if getPrefixToDiscard() != 0 && data!.length >= 5 {
-            let prefixToDiscard = getPrefixToDiscard()
-            newData = data!.subdataWithRange(NSMakeRange(prefixToDiscard, data!.length - prefixToDiscard)) /* subset response data! */
+        if prefixToDiscard != 0 && data.length >= prefixToDiscard {
+            newData = data.subdataWithRange(NSMakeRange(prefixToDiscard, data.length - prefixToDiscard)) /* subset response data! */
         }
         
         let parsedResult: AnyObject!
         var errorMsg:String? = nil
         do {
-            parsedResult = try NSJSONSerialization.JSONObjectWithData(newData == nil ? data! : newData!, options: .AllowFragments)
+            parsedResult = try NSJSONSerialization.JSONObjectWithData(newData == nil ? data : newData!, options: .AllowFragments)
         } catch {
             parsedResult = nil
             print("Could not parse the data as JSON: '\(data)'")
@@ -144,12 +144,6 @@ internal class UdacityUserDataContext: RequestContext {
 }
 
 internal class UdacityLogoutContext: RequestContext {
-//    let userId: String
-//    
-//    init(userId: String) {
-//        self.userId = userId
-//    }
-    
     override func getRequest() -> NSMutableURLRequest? {
         let request = NSMutableURLRequest(URL: NSURL(string: "https://www.udacity.com/api/session")!)
         request.HTTPMethod = "DELETE"

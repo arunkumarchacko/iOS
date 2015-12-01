@@ -146,14 +146,20 @@
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter Url (required)" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Xi1-Tk-faE" userLabel="url">
                                 <rect key="frame" x="12" y="72" width="188" height="30"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
+                                <textInputTraits key="textInputTraits" keyboardType="URL"/>
+                                <connections>
+                                    <action selector="onTextChanged:" destination="p9g-Cs-DiV" eventType="editingChanged" id="YQr-CW-xTX"/>
+                                </connections>
                             </textField>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter location (required)" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="0Kd-xv-maX" userLabel="location">
                                 <rect key="frame" x="12" y="110" width="188" height="30"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
+                                <connections>
+                                    <action selector="onTextChanged:" destination="p9g-Cs-DiV" eventType="editingChanged" id="Hug-l5-YDL"/>
+                                </connections>
                             </textField>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8Cm-0q-JMi">
+                            <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8Cm-0q-JMi">
                                 <rect key="frame" x="208" y="109" width="106" height="32"/>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                                 <state key="normal" title="Find in Map"/>
@@ -198,7 +204,7 @@
                                 <action selector="onCancelClicked:" destination="p9g-Cs-DiV" id="0rc-5l-bKh"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" title="Submit" style="plain" id="0Vt-sw-YsW">
+                        <barButtonItem key="rightBarButtonItem" enabled="NO" title="Submit" id="0Vt-sw-YsW">
                             <connections>
                                 <action selector="onPostClicked:" destination="p9g-Cs-DiV" id="WZI-nW-Svd"/>
                             </connections>
@@ -207,8 +213,10 @@
                     <simulatedScreenMetrics key="simulatedDestinationMetrics"/>
                     <connections>
                         <outlet property="activityIndicator" destination="7P9-ZB-WU1" id="XiQ-T0-txH"/>
+                        <outlet property="findOnMapButton" destination="8Cm-0q-JMi" id="L1u-54-16x"/>
                         <outlet property="locationTextField" destination="0Kd-xv-maX" id="CtA-De-JH7"/>
                         <outlet property="mapView" destination="Yas-Ua-GLX" id="izB-ab-OqO"/>
+                        <outlet property="submitButton" destination="0Vt-sw-YsW" id="I3P-dP-dMf"/>
                         <outlet property="urlTextField" destination="Xi1-Tk-faE" id="iat-FF-gpE"/>
                     </connections>
                 </viewController>

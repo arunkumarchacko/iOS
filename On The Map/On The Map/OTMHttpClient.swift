@@ -9,27 +9,18 @@
 import Foundation
 
 class OTMHttpClient {
-    static var studentLocations: [StudentInformation]? = nil
-    static var reloadRequired = false
-    
-    static func setStudentLocation(l: [StudentInformation]) {
-        if studentLocations == nil {
-            studentLocations = l
-        }
-    }
+    static var studentLocations: [StudentInformation]? = nil { didSet { reloadRequired = false }}
+    static var reloadRequired = false // Used to force refresh studentLocations from server.
     
     static func invokeRequest(context: RequestContext, onSuccess: (AnyObject) -> (), onError: (String) -> ()) {
         print("invokeRequest - \(context.getRequest()?.URL)")
         
-        let session = NSURLSession.sharedSession()
-        
-        let task = session.dataTaskWithRequest(context.getRequest()!) { data, response, error in
-            let error = context.checkForError(response, error: error)
-            if let e = error {
+        let task = NSURLSession.sharedSession().dataTaskWithRequest(context.getRequest()!) { data, response, error in
+            if let e = context.checkForError(response, error: error) {
                 onError(e)
             }
-            else {
-                let parseResponse = context.parseData(data)
+            else if let d = data {
+                let parseResponse = context.parseData(d)
                 if let e = parseResponse.0 {
                     onError(e)
                 }
@@ -37,16 +28,11 @@ class OTMHttpClient {
                     onSuccess(parseResponse.1!)
                 }
             }
+            else {
+                onError("Something unexpected happened. Please retry the operatio.")
+            }
         }
         
         task.resume()
     }
-
-//    static func getParseGetStudentLocationRequest() -> NSMutableURLRequest {
-//        let request = NSMutableURLRequest(URL: NSURL(string: "https://api.parse.com/1/classes/StudentLocation")!)
-//        request.addValue("QrX47CA9cyuGewLdsL7o5Eb8iug6Em8ye0dnAbIr", forHTTPHeaderField: "X-Parse-Application-Id")
-//        request.addValue("QuWThTdiRmTux3YaDseUSEpUKo7aBYM737yKd4gY", forHTTPHeaderField: "X-Parse-REST-API-Key")
-//        
-//        return request
-//    }
 }

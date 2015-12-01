@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		F49AD0FC1C0B10CA0069BB8A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F49AD0FB1C0B10CA0069BB8A /* AppDelegate.swift */; };
-		F49AD0FE1C0B10CA0069BB8A /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F49AD0FD1C0B10CA0069BB8A /* ViewController.swift */; };
 		F49AD1011C0B10CA0069BB8A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F49AD0FF1C0B10CA0069BB8A /* Main.storyboard */; };
 		F49AD1031C0B10CA0069BB8A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F49AD1021C0B10CA0069BB8A /* Assets.xcassets */; };
 		F49AD1061C0B10CA0069BB8A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F49AD1041C0B10CA0069BB8A /* LaunchScreen.storyboard */; };
@@ -48,7 +47,6 @@
 /* Begin PBXFileReference section */
 		F49AD0F81C0B10CA0069BB8A /* On The Map.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "On The Map.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F49AD0FB1C0B10CA0069BB8A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		F49AD0FD1C0B10CA0069BB8A /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		F49AD1001C0B10CA0069BB8A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		F49AD1021C0B10CA0069BB8A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		F49AD1051C0B10CA0069BB8A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -135,7 +133,6 @@
 				F49AD1301C0B111F0069BB8A /* UserInfo.swift */,
 				F49AD1311C0B111F0069BB8A /* Utils.swift */,
 				F49AD0FB1C0B10CA0069BB8A /* AppDelegate.swift */,
-				F49AD0FD1C0B10CA0069BB8A /* ViewController.swift */,
 				F49AD0FF1C0B10CA0069BB8A /* Main.storyboard */,
 				F49AD1021C0B10CA0069BB8A /* Assets.xcassets */,
 				F49AD1041C0B10CA0069BB8A /* LaunchScreen.storyboard */,
@@ -307,7 +304,6 @@
 				F49AD1321C0B111F0069BB8A /* LoginViewController.swift in Sources */,
 				F49AD1371C0B111F0069BB8A /* StudentsMapController.swift in Sources */,
 				F49AD1331C0B111F0069BB8A /* OTMHttpClient.swift in Sources */,
-				F49AD0FE1C0B10CA0069BB8A /* ViewController.swift in Sources */,
 				F49AD1361C0B111F0069BB8A /* StudentLocationController.swift in Sources */,
 				F49AD1381C0B111F0069BB8A /* StudentsTableViewController.swift in Sources */,
 				F49AD13A1C0B111F0069BB8A /* Utils.swift in Sources */,
@@ -542,6 +538,7 @@
 				F49AD1221C0B10CA0069BB8A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		F49AD1231C0B10CA0069BB8A /* Build configuration list for PBXNativeTarget "On The MapTests" */ = {
 			isa = XCConfigurationList;
@@ -550,6 +547,7 @@
 				F49AD1251C0B10CA0069BB8A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		F49AD1261C0B10CA0069BB8A /* Build configuration list for PBXNativeTarget "On The MapUITests" */ = {
 			isa = XCConfigurationList;
@@ -558,6 +556,7 @@
 				F49AD1281C0B10CA0069BB8A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
